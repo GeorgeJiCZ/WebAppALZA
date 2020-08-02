@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,14 +12,27 @@ namespace WebAppALZA.API.Repositories
     {
         private readonly AppDbContext _dbcontext;
 
-        public ProductRepository(AppDbContext dbcontext)
+        public IConfiguration _configuration { get; }
+
+        public ProductRepository(AppDbContext dbcontext, IConfiguration configuration)
         {
             _dbcontext = dbcontext;
+            _configuration = configuration;
         }
 
         public async Task<List<Product>> GetProductsAsync()
         {
-            var products = await _dbcontext.Products.ToListAsync<Product>();
+            var products = await _dbcontext.Products.AsNoTracking().ToListAsync<Product>();
+            return products;
+        }
+
+        public async Task<List<Product>> GetProductsAsync(int? pageSize, int pageIndex)
+        {             
+            int ps = pageSize ?? Int32.Parse(_configuration.GetSection("DefaultPageSize").Value);
+            ps = Math.Abs(ps);
+            pageIndex = Math.Abs(pageIndex);
+
+            var products = await _dbcontext.Products.AsNoTracking().Skip((pageIndex) * ps).Take(ps).ToListAsync<Product>();
             return products;
         }
 

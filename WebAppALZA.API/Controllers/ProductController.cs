@@ -7,7 +7,11 @@ using WebAppALZA.API.Repositories;
 
 namespace WebAppALZA.API.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    // [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -23,7 +27,16 @@ namespace WebAppALZA.API.Controllers
         public async Task<ActionResult> GetAllAsync()
         {
             var products = await _productRepository.GetProductsAsync();
-            if (products == null) return NotFound();
+            if (products == null || products.Count == 0) return NotFound();
+
+            return Ok(products);
+        }
+
+        [HttpGet, MapToApiVersion("2.0")]
+        public async Task<ActionResult> GetAllAsync(int? pageSize, int pageIndex = 0)
+        {
+            var products = await _productRepository.GetProductsAsync(pageSize, pageIndex);
+            if (products == null || products.Count == 0) return NotFound();
 
             return Ok(products);
         }

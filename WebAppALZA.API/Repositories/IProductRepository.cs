@@ -12,6 +12,11 @@ namespace WebAppALZA.API.Repositories
         Task<List<Product>> GetProductsAsync();
 
         /// <summary>          
+        /// Get products from database for pagination.
+        /// </summary>
+        Task<List<Product>> GetProductsAsync(int? pageSize, int pageIndex);
+
+        /// <summary>          
         /// Get one product from database by id.
         /// </summary>
         Task<Product> GetProductAsync(int id);

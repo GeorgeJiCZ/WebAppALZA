@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,15 @@ namespace WebAppALZA.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddApiVersioning();
             services.AddControllers();
+
+            services.AddApiVersioning(v =>
+            {
+                v.DefaultApiVersion = new ApiVersion(1, 0);
+                v.AssumeDefaultVersionWhenUnspecified = true;
+                //v.ReportApiVersions = true;
+            } );
 
             string connection = Configuration.GetConnectionString("LocalDBConnection");
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
