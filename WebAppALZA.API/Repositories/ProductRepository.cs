@@ -23,15 +23,16 @@ namespace WebAppALZA.API.Repositories
 
         public async Task<Product> GetProductAsync(int id)
         {
-            var employee = await _dbcontext.Products.AsNoTracking().Where(empid => empid.Id == id).FirstOrDefaultAsync();
-            return employee;
+            var product = await _dbcontext.Products.AsNoTracking().Where(item => item.Id == id).FirstOrDefaultAsync();            
+            return product;
         }
 
         public async Task<Product> UpdateProductAsync(Product product)
         {
-            _dbcontext.Entry(product).State = EntityState.Modified;
+            var prod = await _dbcontext.Products.FindAsync(product.Id);
+            prod.Description = product.Description;
             await _dbcontext.SaveChangesAsync();
-            return product; 
+            return prod; 
         }
     }
 }

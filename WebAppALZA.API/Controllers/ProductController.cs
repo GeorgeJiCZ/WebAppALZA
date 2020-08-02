@@ -23,6 +23,8 @@ namespace WebAppALZA.API.Controllers
         public async Task<ActionResult> GetAllAsync()
         {
             var products = await _productRepository.GetProductsAsync();
+            if (products == null) return NotFound();
+
             return Ok(products);
         }
 
