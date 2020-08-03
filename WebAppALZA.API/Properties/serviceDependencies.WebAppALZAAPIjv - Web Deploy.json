@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/webresearchdbserver/databases/ProductAlza",
+      "type": "mssql.azure",
+      "connectionId": "LocalDBConnection",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
