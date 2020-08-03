@@ -27,18 +27,22 @@ namespace WebAppALZA.API.Repositories
         }
 
         public async Task<List<Product>> GetProductsAsync(int? pageSize, int pageIndex)
-        {             
-            int ps = pageSize ?? Int32.Parse(_configuration.GetSection("DefaultPageSize").Value);
-            ps = Math.Abs(ps);
-            pageIndex = Math.Abs(pageIndex);
-
-            var products = await _dbcontext.Products.AsNoTracking().Skip((pageIndex) * ps).Take(ps).ToListAsync<Product>();
-            return products;
+        {
+            try 
+            {
+                int ps = pageSize ?? Int32.Parse(_configuration.GetSection("DefaultPageSize").Value); 
+                var products = await _dbcontext.Products.AsNoTracking().Skip((pageIndex) * ps).Take(ps).ToListAsync<Product>();
+                return products;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<Product> GetProductAsync(int id)
         {
-            var product = await _dbcontext.Products.AsNoTracking().Where(item => item.Id == id).FirstOrDefaultAsync();            
+            var product = await _dbcontext.Products.AsNoTracking().Where(item => item.Id == id).SingleOrDefaultAsync();            
             return product;
         }
 
