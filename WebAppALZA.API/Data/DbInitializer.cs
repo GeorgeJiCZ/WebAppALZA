@@ -14,7 +14,8 @@ namespace WebAppALZA.API.Data
     public class DbInitializer : IDbInitializer
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        public IConfiguration _configuration { get; }
+
+        private readonly IConfiguration _configuration;
 
         public DbInitializer(IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {

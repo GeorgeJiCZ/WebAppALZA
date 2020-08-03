@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +14,15 @@ namespace WebAppALZA.API.Repositories
     {
         private readonly AppDbContext _dbcontext;
 
-        public IConfiguration _configuration { get; }
+        private readonly IConfiguration _configuration;
 
-        public ProductRepository(AppDbContext dbcontext, IConfiguration configuration)
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public ProductRepository(AppDbContext dbcontext, IConfiguration configuration, IServiceScopeFactory scopeFactory)
         {
             _dbcontext = dbcontext;
             _configuration = configuration;
+            _scopeFactory = scopeFactory;
         }
 
         public async Task<List<Product>> GetProductsAsync()
@@ -34,8 +39,11 @@ namespace WebAppALZA.API.Repositories
                 var products = await _dbcontext.Products.AsNoTracking().Skip((pageIndex) * ps).Take(ps).ToListAsync<Product>();
                 return products;
             }
-            catch
+            catch (Exception ex)
             {
+                using var serviceScope = _scopeFactory.CreateScope();
+                var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<ProductRepository>>();
+                logger.LogError(ex, "An error occurred while pagination of products.");
                 return null;
             }
         }
