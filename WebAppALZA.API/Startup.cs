@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebAppALZA.API.Data;
+using WebAppALZA.API.Extensions;
 using WebAppALZA.API.Models;
 using WebAppALZA.API.Repositories;
 
@@ -23,8 +24,7 @@ namespace WebAppALZA.API
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddApiVersioning();
+        {             
             services.AddControllers();
 
             services.AddApiVersioning(v =>
@@ -39,6 +39,8 @@ namespace WebAppALZA.API
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
+
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +52,7 @@ namespace WebAppALZA.API
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCustomSwagger();
 
             app.UseEndpoints(endpoints =>
             {
@@ -59,7 +62,6 @@ namespace WebAppALZA.API
 
             //InitializeDBAsync(app).Wait();
             InitializeDBAsync(app);
-
         }
 
         private void InitializeDBAsync(IApplicationBuilder app)

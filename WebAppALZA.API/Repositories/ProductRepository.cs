@@ -58,8 +58,18 @@ namespace WebAppALZA.API.Repositories
         {
             var prod = await _dbcontext.Products.FindAsync(product.Id);
             prod.Description = product.Description;
-            await _dbcontext.SaveChangesAsync();
-            return prod; 
+            try
+            {
+                await _dbcontext.SaveChangesAsync();
+                return prod;
+            }
+            catch (Exception ex)
+            {
+                using var serviceScope = _scopeFactory.CreateScope();
+                var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<ProductRepository>>();
+                logger.LogError(ex, "An error occurred while updating of product.");
+                return null;
+            }
         }
     }
 }

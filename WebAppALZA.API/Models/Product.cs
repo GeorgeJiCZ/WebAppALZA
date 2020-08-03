@@ -6,7 +6,8 @@ namespace WebAppALZA.API.Models
     //[Table("Products")]
     public class Product
     {
-        [Key]        
+        [Key]
+        [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 

@@ -32,8 +32,16 @@ namespace WebAppALZA.API.Controllers
             return Ok(products);
         }
 
-        [HttpGet, MapToApiVersion("2.0")]
-        public async Task<ActionResult> GetAllAsync(int? pageSize, int pageIndex = 0)
+        /*
+         * set routing  parametr "GetPage"
+         * NotSupportedException: 
+         * Conflicting method/path combination "GET api/v{version}/Product" for actions - GetAllAsync, GetPageAsync. 
+         * Actions require a unique method/path combination for Swagger/OpenAPI 3.0. 
+         * Use ConflictingActionsResolver as a workaround
+         */
+        [HttpGet("GetPage"), MapToApiVersion("2.0")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        public async Task<ActionResult> GetPageAsync(int? pageSize, int pageIndex = 0)
         {
             var products = await _productRepository.GetProductsAsync(pageSize, pageIndex);
             if (products == null || products.Count == 0) return NotFound();
