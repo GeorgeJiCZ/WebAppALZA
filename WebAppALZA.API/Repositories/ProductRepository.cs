@@ -13,9 +13,7 @@ namespace WebAppALZA.API.Repositories
     public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _dbcontext;
-
         private readonly IConfiguration _configuration;
-
         private readonly IServiceScopeFactory _scopeFactory;
 
         public ProductRepository(AppDbContext dbcontext, IConfiguration configuration, IServiceScopeFactory scopeFactory)

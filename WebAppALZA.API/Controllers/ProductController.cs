@@ -64,7 +64,7 @@ namespace WebAppALZA.API.Controllers
         public async Task<IActionResult> PutAsync(int id, [FromBody] Product product)
         {
             if (!ModelState.IsValid || id != product.Id) return BadRequest();
-            
+
             if (await _productRepository.GetProductAsync(id) == null) return NotFound();
 
             await _productRepository.UpdateProductAsync(product);        
