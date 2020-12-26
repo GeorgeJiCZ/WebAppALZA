@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using WebAppALZA.API.Data;
 using WebAppALZA.API.Extensions;
 using WebAppALZA.API.Models;
@@ -24,14 +25,13 @@ namespace WebAppALZA.API
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {             
-            services.AddControllers();
+        {
+            services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
 
             services.AddApiVersioning(v =>
             {
                 v.DefaultApiVersion = new ApiVersion(1, 0);
-                v.AssumeDefaultVersionWhenUnspecified = true;
-                //v.ReportApiVersions = true;
+                v.AssumeDefaultVersionWhenUnspecified = true;                 
             } );
 
             string connection = Configuration.GetConnectionString("LocalDBConnection");
@@ -52,25 +52,34 @@ namespace WebAppALZA.API
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            //app.UseCustomSwagger();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseCustomSwagger();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
 
-            });
+            });             
 
-            //InitializeDBAsync(app).Wait();
             InitializeDBAsync(app);
+                        
         }
 
         private void InitializeDBAsync(IApplicationBuilder app)
         {
+            _ = Boolean.TryParse(Configuration.GetSection("InitializeDB").Value, out bool initDB);
+
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using var scope = scopeFactory.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetService<IDbInitializer>();
             dbInitializer.Initialize();
-            dbInitializer.SeedData();            
+
+            if (initDB) dbInitializer.SeedData();            
         }
     }
 }

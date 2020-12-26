@@ -9,23 +9,45 @@ namespace WebAppALZA.API.Repositories
         /// <summary>          
         /// Get all products from database.
         /// </summary>
-        Task<List<Product>> GetProductsAsync();
+        Task<IEnumerable<ProductVM>> GetProductsAsync();
 
         /// <summary>          
         /// Get products from database for pagination.
         /// </summary>
-        Task<List<Product>> GetProductsAsync(int? pageSize, int pageIndex);
+        Task<IEnumerable<ProductVM>> GetProductsAsync(int? pageSize, int pageIndex);
 
         /// <summary>          
         /// Get one product from database by id.
         /// </summary>
-        Task<Product> GetProductAsync(int id);
+        Task<ProductVM> GetProductAsync(int id);
 
         /// <summary>          
         /// Update one product.
         /// </summary>
         //Task UpdateProductAsync(int id);
 
-        Task<Product> UpdateProductAsync(Product product);
+        Task<ProductVM> UpdateProductAsync(ProductVM product);
+
+        /// <summary>          
+        /// Update one product.
+        /// </summary>
+        Task<ProductVM> UpdateProductDescAsync(int id, ProductVM product);
+
+        /// <summary>          
+        /// Create product.
+        /// </summary>
+        Task<ProductVM> CreateProductAsync(ProductVM product);
+
+        /// <summary>          
+        /// Delete product.
+        /// </summary>
+        Task DeleteProductAsync(int id);
+
+        /// <summary>          
+        /// If exist product
+        /// </summary>
+        Task<bool> ProductExistsAsync(int id);
+        
+        
     }
 }

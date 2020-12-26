@@ -29,8 +29,7 @@ namespace WebAppALZA.API.Data
             using var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
             try
             {                
-                if (context.Database.GetPendingMigrations().Any())  context.Database.Migrate();
-                
+                if (context.Database.GetPendingMigrations().Any())  context.Database.Migrate();                  
             }
             catch (Exception ex)
             {

@@ -10,9 +10,10 @@ namespace WebAppALZA.API.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
-                    ImgUri = table.Column<string>(nullable: false),
+                    ImgPath = table.Column<string>(nullable: false),
                     Price = table.Column<decimal>(type: "money", nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },

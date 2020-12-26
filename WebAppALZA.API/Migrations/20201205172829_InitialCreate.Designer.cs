@@ -9,7 +9,7 @@ using WebAppALZA.API.Models;
 namespace WebAppALZA.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200801200635_InitialCreate")]
+    [Migration("20201205172829_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,12 +23,14 @@ namespace WebAppALZA.API.Migrations
             modelBuilder.Entity("WebAppALZA.API.Models.Product", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImgUri")
+                    b.Property<string>("ImgPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
