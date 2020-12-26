@@ -1,5 +1,5 @@
 # WebAppALZA
-Product Web API
+Product REST Web API
 
 This solution WebAppALZA has two projects - WebAppALZA.API is REST Web API project and WebAppALZA.xUnitTest is Unit Test project.
 ASP.NET Core 3.1 and C# 8 are used for programming in MS Visual Studio 2019.
